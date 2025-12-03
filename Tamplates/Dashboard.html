@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Bank Digital{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="welcome-section">
+        <h1>Selamat datang, {{ user.first_name }}!</h1>
+        <p class="account-info">Nomor Rekening: {{ user.account_number }}</p>
+    </div>
+
+    <div class="balance-card">
+        <div class="balance-header">
+            <h2>Saldo Anda</h2>
+            <span class="balance-amount">Rp {{ "{:,.2f}".format(user.balance) }}</span>
+        </div>
+        <div class="balance-actions">
+            <a href="{{ url_for('deposit') }}" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Deposit
+            </a>
+            <a href="{{ url_for('withdraw') }}" class="btn btn-secondary">
+                <i class="fas fa-minus-circle"></i> Tarik
+            </a>
+            <a href="{{ url_for('transfer') }}" class="btn btn-success">
+                <i class="fas fa-exchange-alt"></i> Transfer
+            </a>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <h3>Layanan Cepat</h3>
+        <div class="action-grid">
+            <a href="{{ url_for('transfer') }}" class="action-card">
+                <i class="fas fa-money-bill-transfer"></i>
+                <span>Transfer</span>
+            </a>
+            <a href="{{ url_for('deposit') }}" class="action-card">
+                <i class="fas fa-wallet"></i>
+                <span>Deposit</span>
+            </a>
+            <a href="{{ url_for('withdraw') }}" class="action-card">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Tarik Tunai</span>
+            </a>
+            <a href="{{ url_for('transactions') }}" class="action-card">
+                <i class="fas fa-history"></i>
+                <span>Riwayat</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="recent-transactions">
+        <h3>Transaksi Terakhir</h3>
+        {% if transactions %}
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Jenis</th>
+                        <th>Jumlah</th>
+                        <th>Keterangan</th>
+                        <th>Saldo Akhir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.timestamp.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td>
+                            <span class="transaction-type {{ transaction.transaction_type }}">
+                                {{ transaction.transaction_type|title }}
+                            </span>
+                        </td>
+                        <td class="amount {{ 'negative' if transaction.amount < 0 else 'positive' }}">
+                            Rp {{ "{:,.2f}".format(transaction.amount) }}
+                        </td>
+                        <td>{{ transaction.description }}</td>
+                        <td>Rp {{ "{:,.2f}".format(transaction.balance_after) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-data">Belum ada transaksi.</p>
+        {% endif %}
+        <a href="{{ url_for('transactions') }}" class="btn-view-all">Lihat Semua Transaksi</a>
+    </div>
+</div>
+{% endblock %}
