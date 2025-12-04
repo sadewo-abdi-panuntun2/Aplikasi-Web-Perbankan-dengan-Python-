@@ -177,23 +177,7 @@ git init
 mkdir -p static/css static/js templates
 ```
 
-1. Salin semua file kode ke folder yang sesuai
-2. Commit dan push ke GitHub
 
-```bash
-# Tambahkan semua file
-git add .
-
-# Commit
-git commit -m "Initial commit: Aplikasi web perbankan dengan Flask"
-
-# Tambahkan remote repository
-git remote add origin https://github.com/username/banking-app.git
-
-# Push ke GitHub
-git branch -M main
-git push -u origin main
-```
 
 1. Install dependencies dan jalankan
 
